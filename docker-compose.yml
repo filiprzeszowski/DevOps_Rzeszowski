@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: webservice-app
+    ports:
+      - "8080:8080"          # host:container
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/webservice?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: webuser
+      SPRING_DATASOURCE_PASSWORD: secret
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    container_name: webservice-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: webservice
+      MYSQL_USER: webuser
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: rootsecret
+    ports:
+      - "3307:3306"          # opcjonalnie wystawiamy DB na hosta, nie jest konieczne
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
