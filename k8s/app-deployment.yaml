@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hits-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hits-app
+  template:
+    metadata:
+      labels:
+        app: hits-app
+    spec:
+      containers:
+        - name: hits-app
+          image: hits-app:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://postgres:5432/hitsdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: hitsuser
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: hitspass
